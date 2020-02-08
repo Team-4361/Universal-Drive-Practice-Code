@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.Library.Chassis.TankDrive;
@@ -20,6 +21,8 @@ import frc.Library.Controllers.PneumaticsControl;
 import frc.Library.Controllers.TalonEncoder;
 import frc.Library.Controllers.TurnControl;
 import frc.Library.Controls.JoystickTank;
+import frc.Library.Controls.XboxArcade;
+import frc.Library.Controls.XboxTank;
 
 
 /**
@@ -31,6 +34,7 @@ public class Robot extends IterativeRobot
   //if mode = 1; frisbee shooter
   //if mode = 2; thor's hammer
   //if mode = 3; romulus.
+  //if mode = 4; Xbox tank/arcade drive control (no operator)
   public static int mode = 1;
   SendableChooser <String> modularMode = new SendableChooser<>();
   WPI_TalonSRX lDrive1 = new WPI_TalonSRX(1);
@@ -46,7 +50,8 @@ public class Robot extends IterativeRobot
   Joystick rStick = new Joystick(1);
 
 
-  XboxController xCont = new XboxController(2);
+  //XboxController xCont = new XboxController(2);
+  XboxArcade xCont = new XboxArcade(2, Hand.kLeft);
   //snowblower motor for frisbee shooter
   WPI_TalonSRX modTalon1 = new WPI_TalonSRX(3);
   //CIM motor for frisbee shooter
@@ -70,11 +75,14 @@ public class Robot extends IterativeRobot
     /*double[] stickVal = sticks.GetDrive();
     stickVal[0] = stickVal[0]*-.8;
     stickVal[1] = stickVal[1]*-.8;*/
-    theTank.drive(-lStick.getY(),rStick.getY());
+    
+    
 
     if(mode == 1)
     {
-			//FRISBEE SHOOTER MODE
+      theTank.drive(-lStick.getY(),rStick.getY());
+
+      //FRISBEE SHOOTER MODE
       if(xCont.getXButtonReleased())
       {
         System.out.println("pffffft 0");
@@ -99,6 +107,8 @@ public class Robot extends IterativeRobot
     }
     if(mode == 2)
     {
+      theTank.drive(-lStick.getY(),rStick.getY());
+
 			//HAMMER MODE
       if(xCont.getYButtonPressed())
       {
@@ -127,6 +137,8 @@ public class Robot extends IterativeRobot
     }
     if (mode == 3)
     {
+      theTank.drive(-lStick.getY(),rStick.getY());
+
 			//BALL SHOOTER
 			boolean spinnyThingSpinningQuestionMark = false;
 			boolean indexThingSpinningQuestionMark = false;
@@ -164,7 +176,18 @@ public class Robot extends IterativeRobot
 					modTalon2.set(0.0);
 				}
 			}
-	  }
+    }
+    
+    if (mode==4)//xbox tank/arcade control
+    {
+      theTank.drive(xCont.GetDrive());
+
+
+    }
+
+
+
+
 		//Smartdashboard Values
 
 		try

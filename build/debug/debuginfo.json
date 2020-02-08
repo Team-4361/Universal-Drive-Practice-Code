@@ -1,0 +1,9 @@
+[
+  {
+    "artifact": "frcJava (in project ModularChassis-master)",
+    "target": "roborio",
+    "debugfile": "frcJava_roborio.debugconfig",
+    "project": "ModularChassis-master",
+    "language": "java"
+  }
+]
