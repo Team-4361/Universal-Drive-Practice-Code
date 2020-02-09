@@ -76,14 +76,15 @@ public class Robot extends IterativeRobot
     stickVal[0] = stickVal[0]*-.8;
     stickVal[1] = stickVal[1]*-.8;*/
     
-    
 
+    if(xCont.getBackButtonPressed()) { if(mode<4){mode++;} else{mode=1;} }
+    
     if(mode == 1)
     {
       theTank.drive(-lStick.getY(),rStick.getY());
 
       //FRISBEE SHOOTER MODE
-      if(xCont.getXButtonReleased())
+      /*if(xCont.getXButtonReleased())
       {
         System.out.println("pffffft 0");
         modTalon2.set(0);
@@ -103,14 +104,14 @@ public class Robot extends IterativeRobot
       {
         System.out.println("tsktsktsk 1");
         modTalon1.set(1);
-      }
+      }*/
     }
     if(mode == 2)
     {
       theTank.drive(-lStick.getY(),rStick.getY());
 
 			//HAMMER MODE
-      if(xCont.getYButtonPressed())
+      /*if(xCont.getYButtonPressed())
       {
         System.out.println("hammer BACK");
         modTalon1.set(-1);
@@ -133,14 +134,14 @@ public class Robot extends IterativeRobot
         System.out.println("hammer SETTLE 2");
         modTalon2.set(0);
         modTalon1.set(0);
-      }
+      }*/
     }
     if (mode == 3)
     {
       theTank.drive(-lStick.getY(),rStick.getY());
 
 			//BALL SHOOTER
-			boolean spinnyThingSpinningQuestionMark = false;
+			/*boolean spinnyThingSpinningQuestionMark = false;
 			boolean indexThingSpinningQuestionMark = false;
 			if(xCont.getAButtonPressed())
 			{
@@ -175,7 +176,7 @@ public class Robot extends IterativeRobot
 				{
 					modTalon2.set(0.0);
 				}
-			}
+			}*/
     }
     
     if (mode==4)//xbox tank/arcade control
