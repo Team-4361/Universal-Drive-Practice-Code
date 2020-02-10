@@ -20,6 +20,15 @@ public class JoystickTank
 		
 		return val;
 	}
+
+	public double[] GetDriveDiv(int div)
+	{
+		double[] val = new double[2];
+		val[0] = (left.getY()/div);
+		val[1] = -(right.getY()/div);
+		
+		return val;
+	}
 	
 	public double[] GetPerfectStraight()
 	{

@@ -18,26 +18,24 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.cameraserver.CameraServer;
 import frc.Library.Chassis.TankDrive;
 import frc.Library.Controllers.Drive;
-import frc.Library.Controllers.PneumaticsControl;
-import frc.Library.Controllers.TalonEncoder;
-import frc.Library.Controllers.TurnControl;
 import frc.Library.Controls.JoystickTank;
-import frc.Library.Controls.XboxArcade;
+import frc.Library.Controls.JoystickArcade;
+import frc.Library.Controls.JoystickArcade2;
 import frc.Library.Controls.XboxTank;
+import frc.Library.Controls.XboxArcade;
+import frc.Library.Controls.XboxArcade2;
 
 
-/**
- * This is a demo program showing the use of the RobotDrive class, specifically
- * it contains the code necessary to operate a robot with tank drive.
- */
 public class Robot extends IterativeRobot
 {
-  //if chassisMode = 1; frisbee shooter
-  //if chassisMode = 2; thor's hammer
-  //if chassisMode = 3; romulus.
-  //if chassisMode = 4; Xbox arcade control
-  //if chassisMode = 5; Xbox tank control
-  public static int chassisMode = 1;
+  //if driveMode = 1; Two stick tank control
+  //if driveMode = 2; Two stick arcade (Left - F/B, Right - L/R)
+  //if driveMode = 3; One sitck arcade (Behaves like Xbox arcade)
+  //if driveMode = 4; Xbox tank control
+  //if driveMode = 5; Xbox one-stick arcade control
+  //if driveMode = 6; Xbox two-stick arcade control
+  public static int driveMode = 1;
+  public static int stickSide = 1;
   public static boolean slowMode = true;
   SendableChooser <String> modularMode = new SendableChooser<>();
   WPI_TalonSRX lDrive1 = new WPI_TalonSRX(1);
@@ -53,24 +51,21 @@ public class Robot extends IterativeRobot
   Joystick rStick = new Joystick(1);
 
 
+  //Drive controls creation
+  JoystickTank stickTank = new JoystickTank(0, 1);
+  JoystickArcade stickArcade = new JoystickArcade(stickSide);
+  JoystickArcade2 stickArcade2 = new JoystickArcade2(0, 1);
   XboxController xContOp = new XboxController(2);
-  XboxArcade xContArCon = new XboxArcade(2, Hand.kLeft);
   XboxTank xContTCon = new XboxTank(2);
-  //snowblower motor for frisbee shooter
-  WPI_TalonSRX modTalon1 = new WPI_TalonSRX(3);
-  //CIM motor for frisbee shooter
-	WPI_TalonSRX modTalon2 = new WPI_TalonSRX(5);
-	//modular talon 3
-	WPI_TalonSRX modTalon3 = new WPI_TalonSRX(7);
-	//modular talon 4
-	WPI_TalonSRX modTalon4 = new WPI_TalonSRX(8);
+  XboxArcade xContArcade = new XboxArcade(2, Hand.kLeft);
+  XboxArcade2 xContArcade2 = new XboxArcade2(2);
 
-  Shooter shooter = new Shooter(modTalon1, modTalon2);
 
   @Override
   public void robotInit()
   {
-    SmartDashboard.putNumber("Chassis Mode", chassisMode);
+    SmartDashboard.putNumber("Drive Mode", driveMode);
+    SmartDashboard.putNumber("Arcade Stick Side", stickSide);
     SmartDashboard.putBoolean("Slow Mode", slowMode);
     
     try 
@@ -86,163 +81,49 @@ public class Robot extends IterativeRobot
   @Override
   public void teleopPeriodic()
   {
-    /*double[] stickVal = sticks.GetDrive();
-    stickVal[0] = stickVal[0]*-.8;
-    stickVal[1] = stickVal[1]*-.8;*/
-    
-
-    if(xContOp.getBackButtonPressed()) { if(chassisMode<5){chassisMode++;} else{chassisMode=1;} }
+    if(xContOp.getBackButtonPressed()) { if(driveMode<5){driveMode++;} else{driveMode=1;} }
     if(xContOp.getStartButtonPressed()) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
 
-    chassisMode=(int)SmartDashboard.getNumber("Mode", chassisMode);
-    slowMode=SmartDashboard.getBoolean("Slow Mode", slowMode);
     SmartDashboard.updateValues();
+    driveMode=(int)SmartDashboard.getNumber("Drive Mode", driveMode);
+    stickSide=(int)SmartDashboard.getNumber("Arcade Stick Side", stickSide);
+    slowMode=SmartDashboard.getBoolean("Slow Mode", slowMode);
 
 
-    if(chassisMode == 1)
+    if(driveMode == 1)//two stick tank, use stickTank
     {
-      if(slowMode==false) { theTank.drive(-lStick.getY(),rStick.getY()); }
-      else { theTank.drive(-(lStick.getY()/2),(rStick.getY()/2)); }
-
-
-
-      //FRISBEE SHOOTER MODE
-      /*if(xCont.getXButtonReleased())
-      {
-        System.out.println("pffffft 0");
-        modTalon2.set(0);
-      }
-      if(xCont.getXButtonPressed())
-      {
-        System.out.println("pffffft 1");
-        modTalon2.set(1);
-      }
-  
-      if(xCont.getBButtonReleased())
-      {
-        System.out.println("tsktsktsk 0");
-        modTalon1.set(0);
-      }
-      if(xCont.getBButtonPressed())
-      {
-        System.out.println("tsktsktsk 1");
-        modTalon1.set(1);
-      }*/
+      if(slowMode==false) { theTank.drive(stickTank.GetDrive()); }
+      else { theTank.drive(stickTank.GetDriveDiv(2)); }
     }
-    if(chassisMode == 2)
-    {
-      if(slowMode==false) { theTank.drive(-lStick.getY(),rStick.getY()); }
-      else { theTank.drive(-(lStick.getY()/2),(rStick.getY()/2)); }
 
-			//HAMMER MODE
-      /*if(xCont.getYButtonPressed())
-      {
-        System.out.println("hammer BACK");
-        modTalon1.set(-1);
-        modTalon2.set(-1);
-      }
-      if(xCont.getYButtonReleased())
-      {
-        System.out.println("hammer SETTLE");
-        modTalon1.set(0);
-        modTalon2.set(0);
-      }
-      if(xCont.getAButtonPressed())
-      {
-        System.out.println("hammer FORWARD");
-        modTalon2.set(1);
-        modTalon1.set(1);
-      }
-      if(xCont.getAButtonReleased())
-      {
-        System.out.println("hammer SETTLE 2");
-        modTalon2.set(0);
-        modTalon1.set(0);
-      }*/
+    if(driveMode == 2)//one stick arcade, use stickArcade
+    {
+      if(slowMode==false) { theTank.drive(stickArcade.GetDrive()); }
+      else { theTank.drive(stickArcade.GetDriveDiv(2)); }
     }
-    if (chassisMode == 3)
+
+    if (driveMode == 3)//two stick arcade, use stickArcade2
     {
-      if(slowMode==false) { theTank.drive(-lStick.getY(),rStick.getY()); }
-      else { theTank.drive(-(lStick.getY()/2),(rStick.getY()/2)); }
-
-			//BALL SHOOTER
-			/*boolean spinnyThingSpinningQuestionMark = false;
-			boolean indexThingSpinningQuestionMark = false;
-			if(xCont.getAButtonPressed())
-			{
-				spinnyThingSpinningQuestionMark = !spinnyThingSpinningQuestionMark;
-				if(spinnyThingSpinningQuestionMark)
-				{
-					modTalon3.set(1.0);
-				}
-				else if(!spinnyThingSpinningQuestionMark)
-				{
-					modTalon3.set(0.0);
-				}
-			}
-			
-			if(xCont.getBButtonPressed())
-			{
-				modTalon4.set(1.0);
-			}
-			else if(xCont.getBButtonReleased())
-			{
-				modTalon4.set(0.0);
-			}
-
-			if(xCont.getXButtonPressed())
-			{
-				indexThingSpinningQuestionMark = !indexThingSpinningQuestionMark;
-				if(indexThingSpinningQuestionMark)
-				{
-					modTalon2.set(1.0);
-				}
-				else if(!indexThingSpinningQuestionMark)
-				{
-					modTalon2.set(0.0);
-				}
-			}*/
+      if(slowMode==false) { theTank.drive(stickArcade2.GetDrive()); }
+      else { theTank.drive(stickArcade2.GetDriveDiv(2)); }
     }
     
-    if (chassisMode==4)//xbox arcade control
-    {
-      if (slowMode==false) { theTank.drive(xContArCon.GetDrive()); }
-      else { theTank.drive(xContArCon.GetDriveHalf()); }
-
-      
-
-
-    }
-
-    if (chassisMode==5)//xbox tank control
+    if (driveMode==4)//xbox tank control, use xContTCon
     {
       if (slowMode==false) { theTank.drive(xContTCon.GetDrive()); }
-      else { theTank.drive(xContTCon.GetDriveHalf()); }
-
-
-
-
+      else { theTank.drive(xContTCon.GetDriveDiv(2)); }
     }
 
+    if (driveMode==5)//xbox one-stick arcade control, use xContArcade
+    {
+      if (slowMode==false) { theTank.drive(xContArcade.GetDrive()); }
+      else { theTank.drive(xContArcade.GetDriveDiv(2)); }
+    }
 
-
-		//Smartdashboard Values
-
-		try
-		{
-			//SmartDashboard.putNumber("Agitator Current", CAN[4].getOutputCurrent());
-			//SmartDashboard.putNumber("Shooter Current", CAN[1].getOutputCurrent());
-			//SmartDashboard.putNumber("Climber Current", CAN[5].getOutputCurrent());
-			//SmartDashboard.putBoolean("Geared", gearing);
-			//SmartDashboard.putBoolean("GearIn", !limit[0].get());
-			//SmartDashboard.putNumber("Pusher Current", CAN[9].getOutputCurrent());
-
-			//SmartDashboard.putBoolean("Xbox Control Mode", XboxMode);
-		}
-		catch (Exception e)
-		{
-			//System.out.println("Smartdashboard: " + e.getMessage());
-		}
-		
+    if (driveMode==6)//xbox two-stick arcade control, use xContArcade2
+    {
+      if (slowMode==false) { theTank.drive(xContArcade2.GetDrive()); }
+      else { theTank.drive(xContArcade2.GetDriveDiv(2)); } 
+    }
   }
 }

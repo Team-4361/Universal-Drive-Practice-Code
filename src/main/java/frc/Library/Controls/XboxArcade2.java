@@ -2,22 +2,20 @@ package frc.Library.Controls;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 
-public class XboxArcade extends XboxController
+public class XboxArcade2 extends XboxController
 {
-	GenericHID.Hand hand;
-	public XboxArcade(int position, GenericHID.Hand hand)
+	public XboxArcade2(int position)
 	{
 		super(position);
-		this.hand = hand;
 	}
 	
 	public double[] GetDrive()
 	{
 		double[] val = new double[2];
 		//Left
-		val[0] = getX(hand) - getY(hand);
+		val[0] = getX(Hand.kRight) - getY(Hand.kLeft);
 		//Right
-		val[1] = getX(hand) + getY(hand);
+		val[1] = getX(Hand.kRight) + getY(Hand.kLeft);
 		
 		return val;
 	}
@@ -26,9 +24,9 @@ public class XboxArcade extends XboxController
 	{
 		double[] val = new double[2];
 		//Left
-		val[0] = ((getX(hand) - getY(hand))/div);
+		val[0] = ((getX(Hand.kRight) - getY(Hand.kLeft))/div);
 		//Right
-		val[1] = ((getX(hand) + getY(hand))/div);
+		val[1] = ((getX(Hand.kRight) + getY(Hand.kLeft))/div);
 		
 		return val;
 	}
