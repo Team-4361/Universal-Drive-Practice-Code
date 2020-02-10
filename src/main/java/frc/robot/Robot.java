@@ -8,12 +8,12 @@
 package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.cameraserver.CameraServer;
 import frc.Library.Chassis.TankDrive;
@@ -35,9 +35,9 @@ public class Robot extends IterativeRobot
   //if driveMode = 5; Xbox one-stick arcade control
   //if driveMode = 6; Xbox two-stick arcade control
   public static int driveMode = 1;
-  public static int stickSide = 1;
+  public static int stickSide = 1;//stickSide - Left=1 Right=0
   public static boolean slowMode = true;
-  SendableChooser <String> modularMode = new SendableChooser<>();
+  
   WPI_TalonSRX lDrive1 = new WPI_TalonSRX(1);
   WPI_TalonSRX lDrive2 = new WPI_TalonSRX(2);
   WPI_TalonSRX[] lDriveMotors = {lDrive1,lDrive2};
@@ -47,9 +47,10 @@ public class Robot extends IterativeRobot
   WPI_TalonSRX[] rDriveMotors = {rDrive1,rDrive2};
   Drive rDrive = new Drive(rDriveMotors);
   TankDrive theTank = new TankDrive(lDrive, rDrive);
+  
+  //Stick names
   Joystick lStick = new Joystick(0);
   Joystick rStick = new Joystick(1);
-
 
   //Drive controls creation
   JoystickTank stickTank = new JoystickTank(0, 1);
@@ -81,9 +82,12 @@ public class Robot extends IterativeRobot
   @Override
   public void teleopPeriodic()
   {
-    if(xContOp.getBackButtonPressed()) { if(driveMode<5){driveMode++;} else{driveMode=1;} }
+    //Cycle drive modes
+    if(xContOp.getBackButtonPressed()) { if(driveMode<6){driveMode++;} else{driveMode=1;} }
+    //Toggle slow drive mode
     if(xContOp.getStartButtonPressed()) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
 
+    //Put values to 
     SmartDashboard.updateValues();
     driveMode=(int)SmartDashboard.getNumber("Drive Mode", driveMode);
     stickSide=(int)SmartDashboard.getNumber("Arcade Stick Side", stickSide);
