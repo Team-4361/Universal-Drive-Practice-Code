@@ -10,7 +10,8 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.TimedRobot;
+//import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
@@ -26,7 +27,8 @@ import frc.Library.Controls.XboxArcade;
 import frc.Library.Controls.XboxArcade2;
 
 
-public class Robot extends IterativeRobot
+public class Robot extends TimedRobot
+//public class Robot extends IterativeRobot
 {
   //if driveMode = 1; Two stick tank control
   //if driveMode = 2; Two stick arcade (Left - F/B, Right - L/R)
@@ -35,7 +37,7 @@ public class Robot extends IterativeRobot
   //if driveMode = 5; Xbox one-stick arcade control
   //if driveMode = 6; Xbox two-stick arcade control
   public static int driveMode = 1;
-  public static int stickSide = 1;//stickSide - Left=1 Right=0
+  public static int stickSide = 1;//stickSide - Left=0 Right=1
   public static boolean slowMode = true;
   
   WPI_TalonSRX lDrive1 = new WPI_TalonSRX(1);
@@ -65,13 +67,15 @@ public class Robot extends IterativeRobot
   @Override
   public void robotInit()
   {
+    //Initialize and add values to SmartDashboard/ShuffleBoard
     SmartDashboard.putNumber("Drive Mode", driveMode);
     SmartDashboard.putNumber("Arcade Stick Side", stickSide);
     SmartDashboard.putBoolean("Slow Mode", slowMode);
     
     try 
 		{
-			CameraServer.getInstance().startAutomaticCapture("Camera Front", 0);
+      CameraServer.getInstance().startAutomaticCapture("Camera Front", 0);
+      CameraServer.getInstance().startAutomaticCapture("Camera Rear", 1);
 		}
 		catch (Exception e)
 		{
@@ -87,11 +91,13 @@ public class Robot extends IterativeRobot
     //Toggle slow drive mode
     if(xContOp.getStartButtonPressed()) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
 
-    //Put values to 
-    SmartDashboard.updateValues();
-    driveMode=(int)SmartDashboard.getNumber("Drive Mode", driveMode);
-    stickSide=(int)SmartDashboard.getNumber("Arcade Stick Side", stickSide);
-    slowMode=SmartDashboard.getBoolean("Slow Mode", slowMode);
+    //Update values on SmartDashboard/ShuffleBoard
+    SmartDashboard.putNumber("Drive Mode", driveMode);
+    SmartDashboard.putNumber("Arcade Stick Side", stickSide);
+    SmartDashboard.putBoolean("Slow Mode", slowMode);
+    //driveMode=(int)SmartDashboard.getNumber("Drive Mode", driveMode);
+    //stickSide=(int)SmartDashboard.getNumber("Arcade Stick Side", stickSide);
+    //slowMode=SmartDashboard.getBoolean("Slow Mode", slowMode);
 
 
     if(driveMode == 1)//two stick tank, use stickTank
