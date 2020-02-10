@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.cameraserver.CameraServer;
 import frc.Library.Chassis.TankDrive;
 import frc.Library.Controllers.Drive;
 import frc.Library.Controllers.PneumaticsControl;
@@ -31,11 +32,13 @@ import frc.Library.Controls.XboxTank;
  */
 public class Robot extends IterativeRobot
 {
-  //if mode = 1; frisbee shooter
-  //if mode = 2; thor's hammer
-  //if mode = 3; romulus.
-  //if mode = 4; Xbox tank/arcade drive control (no operator)
-  public static int mode = 1;
+  //if chassisMode = 1; frisbee shooter
+  //if chassisMode = 2; thor's hammer
+  //if chassisMode = 3; romulus.
+  //if chassisMode = 4; Xbox arcade control
+  //if chassisMode = 5; Xbox tank control
+  public static int chassisMode = 1;
+  public static boolean slowMode = true;
   SendableChooser <String> modularMode = new SendableChooser<>();
   WPI_TalonSRX lDrive1 = new WPI_TalonSRX(1);
   WPI_TalonSRX lDrive2 = new WPI_TalonSRX(2);
@@ -50,8 +53,9 @@ public class Robot extends IterativeRobot
   Joystick rStick = new Joystick(1);
 
 
-  //XboxController xCont = new XboxController(2);
-  XboxArcade xCont = new XboxArcade(2, Hand.kLeft);
+  XboxController xContOp = new XboxController(2);
+  XboxArcade xContArCon = new XboxArcade(2, Hand.kLeft);
+  XboxTank xContTCon = new XboxTank(2);
   //snowblower motor for frisbee shooter
   WPI_TalonSRX modTalon1 = new WPI_TalonSRX(3);
   //CIM motor for frisbee shooter
@@ -66,7 +70,17 @@ public class Robot extends IterativeRobot
   @Override
   public void robotInit()
   {
+    SmartDashboard.putNumber("Chassis Mode", chassisMode);
+    SmartDashboard.putBoolean("Slow Mode", slowMode);
     
+    try 
+		{
+			CameraServer.getInstance().startAutomaticCapture("Camera Front", 0);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Camera Error: " + e.getMessage());
+		}
   }
 
   @Override
@@ -77,11 +91,20 @@ public class Robot extends IterativeRobot
     stickVal[1] = stickVal[1]*-.8;*/
     
 
-    if(xCont.getBackButtonPressed()) { if(mode<4){mode++;} else{mode=1;} }
-    
-    if(mode == 1)
+    if(xContOp.getBackButtonPressed()) { if(chassisMode<5){chassisMode++;} else{chassisMode=1;} }
+    if(xContOp.getStartButtonPressed()) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
+
+    chassisMode=(int)SmartDashboard.getNumber("Mode", chassisMode);
+    slowMode=SmartDashboard.getBoolean("Slow Mode", slowMode);
+    SmartDashboard.updateValues();
+
+
+    if(chassisMode == 1)
     {
-      theTank.drive(-lStick.getY(),rStick.getY());
+      if(slowMode==false) { theTank.drive(-lStick.getY(),rStick.getY()); }
+      else { theTank.drive(-(lStick.getY()/2),(rStick.getY()/2)); }
+
+
 
       //FRISBEE SHOOTER MODE
       /*if(xCont.getXButtonReleased())
@@ -106,9 +129,10 @@ public class Robot extends IterativeRobot
         modTalon1.set(1);
       }*/
     }
-    if(mode == 2)
+    if(chassisMode == 2)
     {
-      theTank.drive(-lStick.getY(),rStick.getY());
+      if(slowMode==false) { theTank.drive(-lStick.getY(),rStick.getY()); }
+      else { theTank.drive(-(lStick.getY()/2),(rStick.getY()/2)); }
 
 			//HAMMER MODE
       /*if(xCont.getYButtonPressed())
@@ -136,9 +160,10 @@ public class Robot extends IterativeRobot
         modTalon1.set(0);
       }*/
     }
-    if (mode == 3)
+    if (chassisMode == 3)
     {
-      theTank.drive(-lStick.getY(),rStick.getY());
+      if(slowMode==false) { theTank.drive(-lStick.getY(),rStick.getY()); }
+      else { theTank.drive(-(lStick.getY()/2),(rStick.getY()/2)); }
 
 			//BALL SHOOTER
 			/*boolean spinnyThingSpinningQuestionMark = false;
@@ -179,13 +204,25 @@ public class Robot extends IterativeRobot
 			}*/
     }
     
-    if (mode==4)//xbox tank/arcade control
+    if (chassisMode==4)//xbox arcade control
     {
-      theTank.drive(xCont.GetDrive());
+      if (slowMode==false) { theTank.drive(xContArCon.GetDrive()); }
+      else { theTank.drive(xContArCon.GetDriveHalf()); }
+
+      
 
 
     }
 
+    if (chassisMode==5)//xbox tank control
+    {
+      if (slowMode==false) { theTank.drive(xContTCon.GetDrive()); }
+      else { theTank.drive(xContTCon.GetDriveHalf()); }
+
+
+
+
+    }
 
 
 

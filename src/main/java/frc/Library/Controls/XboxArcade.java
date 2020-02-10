@@ -21,5 +21,15 @@ public class XboxArcade extends XboxController
 		
 		return val;
 	}
-	
+
+	public double[] GetDriveHalf()
+	{
+		double[] val = new double[2];
+		//Left
+		val[0] = ((getX(hand) - getY(hand))/2);
+		//Right
+		val[1] = ((getX(hand) + getY(hand))/2);
+		
+		return val;
+	}
 }

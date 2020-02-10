@@ -19,5 +19,15 @@ public class XboxTank extends XboxController
 		
 		return val;
 	}
-	
+
+	public double[] GetDriveHalf()
+	{
+		double[] val = new double[2];
+		//Left
+		val[0] = (getY(Hand.kLeft)/2);
+		//Right
+		val[1] = (getY(Hand.kRight)/2);
+		
+		return val;
+	}
 }
