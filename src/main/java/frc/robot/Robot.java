@@ -41,11 +41,11 @@ public class Robot extends TimedRobot
   public static boolean slowMode = true;
   
   WPI_TalonSRX lDrive1 = new WPI_TalonSRX(1);
-  WPI_TalonSRX lDrive2 = new WPI_TalonSRX(2);
+  WPI_TalonSRX lDrive2 = new WPI_TalonSRX(5);
   WPI_TalonSRX[] lDriveMotors = {lDrive1,lDrive2};
   Drive lDrive = new Drive(lDriveMotors);
-  WPI_TalonSRX rDrive1 = new WPI_TalonSRX(4);
-  WPI_TalonSRX rDrive2 = new WPI_TalonSRX(6);
+  WPI_TalonSRX rDrive1 = new WPI_TalonSRX(3);
+  WPI_TalonSRX rDrive2 = new WPI_TalonSRX(4);
   WPI_TalonSRX[] rDriveMotors = {rDrive1,rDrive2};
   Drive rDrive = new Drive(rDriveMotors);
   TankDrive theTank = new TankDrive(lDrive, rDrive);
@@ -88,8 +88,12 @@ public class Robot extends TimedRobot
   {
     //Cycle drive modes
     if(xContOp.getBackButtonPressed()) { if(driveMode<6){driveMode++;} else{driveMode=1;} }
+    
     //Toggle slow drive mode
     if(xContOp.getStartButtonPressed()) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
+    if(lStick.getTriggerPressed()) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
+    if(rStick.getTriggerPressed()) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
+
 
     //Update values on SmartDashboard/ShuffleBoard
     SmartDashboard.putNumber("Drive Mode", driveMode);

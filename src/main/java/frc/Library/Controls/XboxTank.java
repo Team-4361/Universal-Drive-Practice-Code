@@ -13,7 +13,7 @@ public class XboxTank extends XboxController
 	{
 		double[] val = new double[2];
 		//Left
-		val[0] = getY(Hand.kLeft);
+		val[0] = -getY(Hand.kLeft);
 		//Right
 		val[1] = getY(Hand.kRight);
 		
@@ -24,7 +24,7 @@ public class XboxTank extends XboxController
 	{
 		double[] val = new double[2];
 		//Left
-		val[0] = (getY(Hand.kLeft)/div);
+		val[0] = -(getY(Hand.kLeft)/div);
 		//Right
 		val[1] = (getY(Hand.kRight)/div);
 		
