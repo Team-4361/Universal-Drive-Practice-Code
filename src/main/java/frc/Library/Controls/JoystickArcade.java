@@ -9,13 +9,24 @@ public class JoystickArcade extends Joystick
 		super(pos);
 	}
 	
-	public double[] GetDriveValue()
+	public double[] GetDrive()
 	{
 		double[] val = new double[2];
 		//Left
 		val[0] = getX() - getY();
 		//Right
 		val[1] = getX() + getY();
+		
+		return val;
+	}
+
+	public double[] GetDriveDiv(int div)
+	{
+		double[] val = new double[2];
+		//Left
+		val[0] = ((getX() - getY())/div);
+		//Right
+		val[1] = ((getX() + getY())/div);
 		
 		return val;
 	}
