@@ -31,8 +31,8 @@ public class Robot extends TimedRobot
 //public class Robot extends IterativeRobot
 {
   //if driveMode = 1; Two stick tank control
-  //if driveMode = 2; Two stick arcade (Left - F/B, Right - L/R)
-  //if driveMode = 3; One sitck arcade (Behaves like Xbox arcade)
+  //if driveMode = 2; One sitck arcade (Behaves like Xbox arcade)
+  //if driveMode = 3; Two stick arcade (Left - F/B, Right - L/R)
   //if driveMode = 4; Xbox tank control
   //if driveMode = 5; Xbox one-stick arcade control
   //if driveMode = 6; Xbox two-stick arcade control
@@ -71,6 +71,7 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("Drive Mode", driveMode);
     SmartDashboard.putNumber("Arcade Stick Side", stickSide);
     SmartDashboard.putBoolean("Slow Mode", slowMode);
+    SmartDashboard.putString("Drive Mode List", " 1 = Two-Stick(Normal) Tank/r 2 = One-Stick(Right side) Arcade/r 3 = Two-Stick(L=F/B R=L/R) Arcade/r 4 = Xbox Tank/r 5 = Xbox One-Stick Arcade/r 6 = Xbox Two-Stick Arcade");
     
     try 
 		{
@@ -90,10 +91,9 @@ public class Robot extends TimedRobot
     if(xContOp.getBackButtonPressed()) { if(driveMode<6){driveMode++;} else{driveMode=1;} }
     
     //Toggle slow drive mode
-    if(xContOp.getStartButtonPressed()) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
-    if(lStick.getTriggerPressed()) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
-    if(rStick.getTriggerPressed()) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
-
+    /*Xbox*/if(xContOp.getStartButtonPressed()) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
+    /*Left Stick*/if(lStick.getTriggerPressed()) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
+    /*Right Stick*/if(rStick.getTriggerPressed()) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
 
     //Update values on SmartDashboard/ShuffleBoard
     SmartDashboard.putNumber("Drive Mode", driveMode);
