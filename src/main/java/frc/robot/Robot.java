@@ -36,37 +36,69 @@ public class Robot extends TimedRobot
   //if driveMode = 4; Xbox tank control
   //if driveMode = 5; Xbox one-stick arcade control
   //if driveMode = 6; Xbox two-stick arcade control
-  public static int driveMode = 1;
-  public static int stickSide = 1;//stickSide - Left=0 Right=1
-  public static boolean slowMode = true;
+
+  //Value creation
+  public static int driveMode;
+  public static int stickSide;//stickSide - Left=0 Right=1
+  public static boolean slowMode;
   
-  WPI_TalonSRX lDrive1 = new WPI_TalonSRX(1);
-  WPI_TalonSRX lDrive2 = new WPI_TalonSRX(5);
-  WPI_TalonSRX[] lDriveMotors = {lDrive1,lDrive2};
-  Drive lDrive = new Drive(lDriveMotors);
-  WPI_TalonSRX rDrive1 = new WPI_TalonSRX(3);
-  WPI_TalonSRX rDrive2 = new WPI_TalonSRX(4);
-  WPI_TalonSRX[] rDriveMotors = {rDrive1,rDrive2};
-  Drive rDrive = new Drive(rDriveMotors);
-  TankDrive theTank = new TankDrive(lDrive, rDrive);
+  //Drive creation
+  WPI_TalonSRX lDrive1;
+  WPI_TalonSRX lDrive2;
+  //WPI_TalonSRX[] lDriveMotors;
+  Drive lDrive;
+  WPI_TalonSRX rDrive1;
+  WPI_TalonSRX rDrive2;
+  //WPI_TalonSRX[] rDriveMotors;
+  Drive rDrive;
+  TankDrive theTank;
   
-  //Stick names
-  Joystick lStick = new Joystick(0);
-  Joystick rStick = new Joystick(1);
+  //Stick creation
+  Joystick lStick;
+  Joystick rStick;
 
   //Drive controls creation
-  JoystickTank stickTank = new JoystickTank(0, 1);
-  JoystickArcade stickArcade = new JoystickArcade(stickSide);
-  JoystickArcade2 stickArcade2 = new JoystickArcade2(0, 1);
-  XboxController xContOp = new XboxController(2);
-  XboxTank xContTCon = new XboxTank(2);
-  XboxArcade xContArcade = new XboxArcade(2, Hand.kLeft);
-  XboxArcade2 xContArcade2 = new XboxArcade2(2);
+  JoystickTank stickTank;
+  JoystickArcade stickArcade;
+  JoystickArcade2 stickArcade2;
+  XboxController xContOp;
+  XboxTank xContTCon;
+  XboxArcade xContArcade;
+  XboxArcade2 xContArcade2;
 
 
   @Override
   public void robotInit()
   {
+    //Value assignment
+    driveMode = 1;
+    stickSide = 1;//stickSide - Left=0 Right=1
+    slowMode = true;
+    
+    //Drive assignment
+    lDrive1 = new WPI_TalonSRX(1);
+    lDrive2 = new WPI_TalonSRX(5);
+    WPI_TalonSRX[] lDriveMotors = {lDrive1, lDrive2};
+    lDrive = new Drive(lDriveMotors);
+    rDrive1 = new WPI_TalonSRX(3);
+    rDrive2 = new WPI_TalonSRX(4);
+    WPI_TalonSRX[] rDriveMotors = {rDrive1, rDrive2};
+    rDrive = new Drive(rDriveMotors);
+    theTank = new TankDrive(lDrive, rDrive);
+    
+    //Stick assignment
+    lStick = new Joystick(0);
+    rStick = new Joystick(1);
+
+    //Drive controls assignment
+    stickTank = new JoystickTank(0, 1);
+    stickArcade = new JoystickArcade(stickSide);
+    stickArcade2 = new JoystickArcade2(0, 1);
+    xContOp = new XboxController(2);
+    xContTCon = new XboxTank(2);
+    xContArcade = new XboxArcade(2, Hand.kLeft);
+    xContArcade2 = new XboxArcade2(2);
+
     //Initialize and add values to SmartDashboard/ShuffleBoard
     SmartDashboard.putNumber("Drive Mode", driveMode);
     SmartDashboard.putNumber("Arcade Stick Side", stickSide);
@@ -75,8 +107,8 @@ public class Robot extends TimedRobot
     
     try 
 		{
-      CameraServer.getInstance().startAutomaticCapture("Camera Front", 0);
-      CameraServer.getInstance().startAutomaticCapture("Camera Rear", 1);
+      CameraServer.getInstance().startAutomaticCapture("Camera 0", 0);
+      CameraServer.getInstance().startAutomaticCapture("Camera 1", 1);
 		}
 		catch (Exception e)
 		{
@@ -91,7 +123,9 @@ public class Robot extends TimedRobot
     if(xContOp.getBackButtonPressed()) { if(driveMode<6){driveMode++;} else{driveMode=1;} }
     
     //Toggle slow drive mode
-    /*Xbox*/if(xContOp.getStartButtonPressed()) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
+    /*Xbox Start Button*/if(xContOp.getStartButtonPressed()) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
+    /*Xbox A Button*/if(xContOp.getAButtonPressed()) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
+    /*Xbox Bumpers*/if(xContOp.getBumperPressed(Hand.kLeft) || xContOp.getBumperPressed(Hand.kRight)) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
     /*Left Stick*/if(lStick.getTriggerPressed()) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
     /*Right Stick*/if(rStick.getTriggerPressed()) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
 
