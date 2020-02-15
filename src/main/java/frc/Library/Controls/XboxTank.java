@@ -20,13 +20,13 @@ public class XboxTank extends XboxController
 		return val;
 	}
 
-	public double[] GetDriveDiv(int div)
+	public double[] GetDriveDiv(double div)
 	{
 		double[] val = new double[2];
 		//Left
-		val[0] = -(getY(Hand.kLeft)/div);
+		val[0] = -(getY(Hand.kLeft)*div);
 		//Right
-		val[1] = (getY(Hand.kRight)/div);
+		val[1] = (getY(Hand.kRight)*div);
 		
 		return val;
 	}

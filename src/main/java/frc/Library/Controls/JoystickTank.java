@@ -21,11 +21,11 @@ public class JoystickTank
 		return val;
 	}
 
-	public double[] GetDriveDiv(int div)
+	public double[] GetDriveDiv(double div)
 	{
 		double[] val = new double[2];
-		val[0] = -(left.getY()/div);
-		val[1] = (right.getY()/div);
+		val[0] = -(left.getY()*div);
+		val[1] = (right.getY()*div);
 		
 		return val;
 	}

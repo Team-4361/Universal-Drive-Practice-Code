@@ -24,13 +24,13 @@ public class JoystickArcade2
         return val;
     }
 
-    public double[] GetDriveDiv(int div)
+    public double[] GetDriveDiv(double div)
     {
         double[] val = new double[2];
         //Left drive
-        val[0] = ((right.getX() - left.getY())/div);
+        val[0] = ((right.getX() - left.getY())*div);
         //Right drive
-        val[1] = ((right.getX() + left.getY())/div);
+        val[1] = ((right.getX() + left.getY())*div);
         
         return val;
     }

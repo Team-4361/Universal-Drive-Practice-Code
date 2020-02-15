@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.cameraserver.CameraServer;
 import frc.Library.Chassis.TankDrive;
@@ -38,9 +39,9 @@ public class Robot extends TimedRobot
   //if driveMode = 6; Xbox two-stick arcade control
 
   //Value creation
-  public static int driveMode;
-  public static int stickSide;//stickSide - Left=0 Right=1
-  public static boolean slowMode;
+  public static int driveMode, stickSide;//stickSide - Left=0 Right=1
+  public static double div;//divDef is the Default of div
+  public static boolean slowMode;//make sure kyle uses this
   
   //Drive creation
   WPI_TalonSRX lDrive1;
@@ -73,6 +74,7 @@ public class Robot extends TimedRobot
     //Value assignment
     driveMode = 1;
     stickSide = 1;//stickSide - Left=0 Right=1
+    div=0.5;//Slow Mode Multiplier (default=0.5)
     slowMode = true;
     
     //Drive assignment
@@ -103,9 +105,10 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("Drive Mode", driveMode);
     SmartDashboard.putNumber("Arcade Stick Side", stickSide);
     SmartDashboard.putBoolean("Slow Mode", slowMode);
-    SmartDashboard.putString("Drive Mode List", " 1 = Two-Stick(Normal) Tank/r 2 = One-Stick(Right side) Arcade/r 3 = Two-Stick(L=F/B R=L/R) Arcade/r 4 = Xbox Tank/r 5 = Xbox One-Stick Arcade/r 6 = Xbox Two-Stick Arcade");
+    SmartDashboard.putString("Drive Mode List", " 1 = Two-Stick(Normal) | Tank 2 = One-Stick(Right side) Arcade | 3 = Two-Stick(L=F/B R=L/R) Arcade | 4 = Xbox Tank | 5 = Xbox One-Stick Arcade | 6 = Xbox Two-Stick Arcade");
+    SmartDashboard.putNumber("Slow Mode Multiplier (default=0.5)", div);
     
-    try 
+    try
 		{
       CameraServer.getInstance().startAutomaticCapture("Camera 0", 0);
       CameraServer.getInstance().startAutomaticCapture("Camera 1", 1);
@@ -129,49 +132,52 @@ public class Robot extends TimedRobot
     /*Left Stick*/if(lStick.getTriggerPressed()) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
     /*Right Stick*/if(rStick.getTriggerPressed()) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
 
-    //Update values on SmartDashboard/ShuffleBoard
+    //Update values to/from SmartDashboard/ShuffleBoard
+    if (SmartDashboard.getNumber("Slow Mode Multiplier (default=0.5)", div)>1)
+    { div=0.5; SmartDashboard.putNumber("Slow Mode Multiplier (default=0.5)", 0.5); }
+    else { div=(double)SmartDashboard.getNumber("Slow Mode Multiplier (default=0.5)", div); SmartDashboard.putNumber("Slow Mode Multiplier (default=0.5)", div); }
     SmartDashboard.putNumber("Drive Mode", driveMode);
     SmartDashboard.putNumber("Arcade Stick Side", stickSide);
     SmartDashboard.putBoolean("Slow Mode", slowMode);
-    //driveMode=(int)SmartDashboard.getNumber("Drive Mode", driveMode);
-    //stickSide=(int)SmartDashboard.getNumber("Arcade Stick Side", stickSide);
-    //slowMode=SmartDashboard.getBoolean("Slow Mode", slowMode);
+    driveMode=(int)SmartDashboard.getNumber("Drive Mode", driveMode);
+    stickSide=(int)SmartDashboard.getNumber("Arcade Stick Side", stickSide);
+    slowMode=SmartDashboard.getBoolean("Slow Mode", slowMode);    
 
 
     if(driveMode == 1)//two stick tank, use stickTank
     {
       if(slowMode==false) { theTank.drive(stickTank.GetDrive()); }
-      else { theTank.drive(stickTank.GetDriveDiv(2)); }
+      else { theTank.drive(stickTank.GetDriveDiv(div)); }
     }
 
     if(driveMode == 2)//one stick arcade, use stickArcade
     {
       if(slowMode==false) { theTank.drive(stickArcade.GetDrive()); }
-      else { theTank.drive(stickArcade.GetDriveDiv(2)); }
+      else { theTank.drive(stickArcade.GetDriveDiv(div)); }
     }
 
     if (driveMode == 3)//two stick arcade, use stickArcade2
     {
       if(slowMode==false) { theTank.drive(stickArcade2.GetDrive()); }
-      else { theTank.drive(stickArcade2.GetDriveDiv(2)); }
+      else { theTank.drive(stickArcade2.GetDriveDiv(div)); }
     }
     
     if (driveMode==4)//xbox tank control, use xContTCon
     {
       if (slowMode==false) { theTank.drive(xContTCon.GetDrive()); }
-      else { theTank.drive(xContTCon.GetDriveDiv(2)); }
+      else { theTank.drive(xContTCon.GetDriveDiv(div)); }
     }
 
     if (driveMode==5)//xbox one-stick arcade control, use xContArcade
     {
       if (slowMode==false) { theTank.drive(xContArcade.GetDrive()); }
-      else { theTank.drive(xContArcade.GetDriveDiv(2)); }
+      else { theTank.drive(xContArcade.GetDriveDiv(div)); }
     }
 
     if (driveMode==6)//xbox two-stick arcade control, use xContArcade2
     {
       if (slowMode==false) { theTank.drive(xContArcade2.GetDrive()); }
-      else { theTank.drive(xContArcade2.GetDriveDiv(2)); } 
+      else { theTank.drive(xContArcade2.GetDriveDiv(div)); } 
     }
   }
 }

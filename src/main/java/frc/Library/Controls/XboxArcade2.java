@@ -20,13 +20,13 @@ public class XboxArcade2 extends XboxController
 		return val;
 	}
 
-	public double[] GetDriveDiv(int div)
+	public double[] GetDriveDiv(double div)
 	{
 		double[] val = new double[2];
 		//Left
-		val[0] = ((getX(Hand.kRight) - getY(Hand.kLeft))/div);
+		val[0] = ((getX(Hand.kRight) - getY(Hand.kLeft))*div);
 		//Right
-		val[1] = ((getX(Hand.kRight) + getY(Hand.kLeft))/div);
+		val[1] = ((getX(Hand.kRight) + getY(Hand.kLeft))*div);
 		
 		return val;
 	}

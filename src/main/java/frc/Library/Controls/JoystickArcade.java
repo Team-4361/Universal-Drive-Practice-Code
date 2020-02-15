@@ -20,13 +20,13 @@ public class JoystickArcade extends Joystick
 		return val;
 	}
 
-	public double[] GetDriveDiv(int div)
+	public double[] GetDriveDiv(double div)
 	{
 		double[] val = new double[2];
 		//Left
-		val[0] = ((getX() - getY())/div);
+		val[0] = ((getX() - getY())*div);
 		//Right
-		val[1] = ((getX() + getY())/div);
+		val[1] = ((getX() + getY())*div);
 		
 		return val;
 	}
