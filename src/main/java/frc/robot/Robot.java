@@ -133,7 +133,7 @@ public class Robot extends TimedRobot
     /*Right Stick*/if(rStick.getTriggerPressed()) { if(slowMode==false){slowMode=true;} else if(slowMode==true){slowMode=false;} }
 
     //Update values to/from SmartDashboard/ShuffleBoard
-    if (SmartDashboard.getNumber("Slow Mode Multiplier (default=0.5)", div)>1)
+    if (SmartDashboard.getNumber("Slow Mode Multiplier (default=0.5)", div)>0.9)
     { div=0.5; SmartDashboard.putNumber("Slow Mode Multiplier (default=0.5)", 0.5); }
     else { div=(double)SmartDashboard.getNumber("Slow Mode Multiplier (default=0.5)", div); SmartDashboard.putNumber("Slow Mode Multiplier (default=0.5)", div); }
     SmartDashboard.putNumber("Drive Mode", driveMode);
