@@ -63,7 +63,7 @@ public class Robot extends TimedRobot
   JoystickArcade stickArcade;
   JoystickArcade2 stickArcade2;
   XboxController xContOp;
-  XboxTank xContTCon;
+  XboxTank xContTank;
   XboxArcade xContArcade;
   XboxArcade2 xContArcade2;
 
@@ -97,13 +97,13 @@ public class Robot extends TimedRobot
     stickArcade = new JoystickArcade(stickSide);
     stickArcade2 = new JoystickArcade2(0, 1);
     xContOp = new XboxController(2);
-    xContTCon = new XboxTank(2);
+    xContTank = new XboxTank(2);
     xContArcade = new XboxArcade(2, Hand.kLeft);
     xContArcade2 = new XboxArcade2(2);
 
     //Initialize and add values to SmartDashboard/ShuffleBoard
     SmartDashboard.putNumber("Drive Mode", driveMode);
-    SmartDashboard.putNumber("Arcade Stick Side", stickSide);
+    SmartDashboard.putNumber("Arcade Stick Side (Left=0)", stickSide);
     SmartDashboard.putBoolean("Slow Mode", slowMode);
     SmartDashboard.putString("Drive Mode List", " 1 = Two-Stick(Normal) | Tank 2 = One-Stick(Right side) Arcade | 3 = Two-Stick(L=F/B R=L/R) Arcade | 4 = Xbox Tank | 5 = Xbox One-Stick Arcade | 6 = Xbox Two-Stick Arcade");
     SmartDashboard.putNumber("Slow Mode Multiplier (default=0.5)", div);
@@ -137,10 +137,10 @@ public class Robot extends TimedRobot
     { div=0.5; SmartDashboard.putNumber("Slow Mode Multiplier (default=0.5)", 0.5); }
     else { div=(double)SmartDashboard.getNumber("Slow Mode Multiplier (default=0.5)", div); SmartDashboard.putNumber("Slow Mode Multiplier (default=0.5)", div); }
     SmartDashboard.putNumber("Drive Mode", driveMode);
-    SmartDashboard.putNumber("Arcade Stick Side", stickSide);
+    SmartDashboard.putNumber("Arcade Stick Side (Left=0)", stickSide);
     SmartDashboard.putBoolean("Slow Mode", slowMode);
     driveMode=(int)SmartDashboard.getNumber("Drive Mode", driveMode);
-    stickSide=(int)SmartDashboard.getNumber("Arcade Stick Side", stickSide);
+    stickSide=(int)SmartDashboard.getNumber("Arcade Stick Side (Left=0)", stickSide);
     slowMode=SmartDashboard.getBoolean("Slow Mode", slowMode);    
 
 
@@ -162,10 +162,10 @@ public class Robot extends TimedRobot
       else { theTank.drive(stickArcade2.GetDriveDiv(div)); }
     }
     
-    if (driveMode==4)//xbox tank control, use xContTCon
+    if (driveMode==4)//xbox tank control, use xContTank
     {
-      if (slowMode==false) { theTank.drive(xContTCon.GetDrive()); }
-      else { theTank.drive(xContTCon.GetDriveDiv(div)); }
+      if (slowMode==false) { theTank.drive(xContTank.GetDrive()); }
+      else { theTank.drive(xContTank.GetDriveDiv(div)); }
     }
 
     if (driveMode==5)//xbox one-stick arcade control, use xContArcade
