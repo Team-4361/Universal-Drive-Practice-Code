@@ -19,6 +19,16 @@ public class JoystickArcade extends Joystick
 		
 		return val;
 	}
+	public double[] GetDriveValue()
+	{
+		double[] val = new double[2];
+		//Left
+		val[0] = getX() - getY();
+		//Right
+		val[1] = getX() + getY();
+		
+		return val;
+	}
 
 	public double[] GetDriveSpeed(double div)
 	{

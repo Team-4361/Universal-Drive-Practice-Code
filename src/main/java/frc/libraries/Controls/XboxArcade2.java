@@ -19,6 +19,17 @@ public class XboxArcade2 extends XboxController
 		
 		return val;
 	}
+	
+	public double[] GetDriveValue()
+	{
+		double[] val = new double[2];
+		//Left
+		val[0] = getX(Hand.kRight) - getY(Hand.kLeft);
+		//Right
+		val[1] = getX(Hand.kRight) + getY(Hand.kLeft);
+		
+		return val;
+	}
 
 	public double[] GetDriveSpeed(double div)
 	{

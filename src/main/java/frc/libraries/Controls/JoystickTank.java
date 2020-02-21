@@ -12,6 +12,16 @@ public class JoystickTank
 	}
 	
 	//Left = 0, Right = 1
+	public double[] GetDriveValue()
+	{
+		double[] val = new double[2];
+		val[0] = -left.getY();
+		val[1] = right.getY();
+		
+		return val;
+	}
+	
+	//Left = 0, Right = 1
 	public double[] GetDrive()
 	{
 		double[] val = new double[2];
@@ -42,7 +52,7 @@ public class JoystickTank
 	public double[] GetPerfectTurn()
 	{
 		double[] val = new double[2];
-		val[0] = -right.getX();
+		val[0] = right.getX();
 		val[1] = right.getX();
 		
 		return val;

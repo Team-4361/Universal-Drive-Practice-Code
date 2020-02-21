@@ -1,7 +1,7 @@
 package frc.libraries.Chassis;
 import frc.libraries.Controllers.Drive;
 
-public class HDrive extends TankDrive implements Strafe
+public class HDrive extends TankDrive
 {
 	Drive Middle;
 	public HDrive(Drive Left, Drive Right, Drive Middle)
@@ -14,11 +14,6 @@ public class HDrive extends TankDrive implements Strafe
 	{
 		super.drive(lVal, rVal);
 		Middle.drive(mVal);
-	}
-
-	public void Strafe(double val)
-	{
-		Middle.drive(val);
 	}
 	
 	public void Stop()

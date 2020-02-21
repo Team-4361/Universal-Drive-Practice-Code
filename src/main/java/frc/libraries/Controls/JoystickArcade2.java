@@ -23,6 +23,17 @@ public class JoystickArcade2
         
         return val;
     }
+	
+	public double[] GetDriveValue()
+    {
+        double[] val = new double[2];
+        //Left drive
+        val[0] = right.getX() - left.getY();
+        //Right drive
+        val[1] = right.getX() + left.getY();
+        
+        return val;
+    }
 
     public double[] GetDriveSpeed(double div)
     {

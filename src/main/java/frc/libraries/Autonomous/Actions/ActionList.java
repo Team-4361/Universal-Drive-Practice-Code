@@ -2,29 +2,29 @@ package frc.libraries.Autonomous.Actions;
 
 import java.util.*;
 
-public class ActionList implements Iterable<Action>
+public class ActionList implements Iterable<ActionBase>
 {
-	private List<Action> list;
+	private List<ActionBase> list;
 	
 	public ActionList()
 	{
-		list = new ArrayList<Action>();
+		list = new ArrayList<ActionBase>();
 	}
 	
-	public void Add(Action action)
+	public void Add(ActionBase action)
 	{
 		list.add(action);
 	}
 	
 	public void Add(ActionList list)
 	{
-		for(Action action : list)
+		for(ActionBase action : list)
 		{
 			this.list.add(action);
 		}
 	}
 	
-	public Action Get(int index)
+	public ActionBase Get(int index)
 	{
 		return this.list.get(index);
 	}
@@ -34,7 +34,7 @@ public class ActionList implements Iterable<Action>
 		return list.size();
 	}
 	
-	public Iterator<Action> iterator()
+	public Iterator<ActionBase> iterator()
 	{
 		return null;
 	}

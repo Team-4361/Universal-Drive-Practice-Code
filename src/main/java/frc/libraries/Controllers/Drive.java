@@ -1,53 +1,87 @@
 package frc.libraries.Controllers;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import java.util.ArrayList;
 
-public class Drive
-{
-	ArrayList<WPI_TalonSRX> CAN = new ArrayList<WPI_TalonSRX>();
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMax;
+
+public class Drive {
+	WPI_TalonSRX[] talons;
+	CANSparkMax[] sparks;
 	
-	static WPI_TalonSRX[] FullCAN;
+	static WPI_TalonSRX[] CANTalons;
+	static CANSparkMax[] CANSparks;
+
+	String controllerType;
 	
-	public Drive(WPI_TalonSRX[] CAN)
-	{
-		this.CAN.clear();
-		for(int i = 0; i < CAN.length; i++)
+	public Drive(final WPI_TalonSRX[] CAN) {
+		this.talons = CAN;
+		controllerType = "TalonSRX";
+	}
+
+	public Drive(final CANSparkMax[] CAN) {
+		this.sparks = CAN;
+		controllerType = "SparkMax";
+	}
+
+	public Drive(final int[] nums) {
+		if(controllerType == "TalonSRX")
 		{
-			this.CAN.add(CAN[i]);
+			talons = new WPI_TalonSRX[nums.length];
+			for (int i = 0; i < nums.length; i++) {
+				talons[i] = CANTalons[nums[i]];
+			}
+		}
+		if(controllerType == "SparkMax")
+		{	
+			sparks = new CANSparkMax[nums.length];
+			for (int i = 0; i < nums.length; i++) {
+				sparks[i] = CANSparks[nums[i]];
+			}
 		}
 	}
 	
-	public Drive(int[] nums)
+
+	public void drive(final double val)
 	{
-		CAN = new ArrayList<WPI_TalonSRX>();
-		for(int i = 0; i < nums.length; i++)
+		if(controllerType == "TalonSRX")
 		{
-			CAN.add(FullCAN[nums[i]]);
+			for (final WPI_TalonSRX tal : talons) {
+				tal.set(val);
+			}
+		}
+		else if(controllerType == "SparkMax")
+		{
+			for(final CANSparkMax spark : sparks)
+			{
+				spark.set(val);
+			}
 		}
 	}
-	
-	public void drive(double val)
-	{
-		for (WPI_TalonSRX tal : CAN)
-		{
-			tal.set(val);
-		}
-	}
-	
-	public double GetSpeed()
-	{
-		if(CAN != null && CAN.get(0) != null)
-			return CAN.get(0).get();
+
+	public double GetSpeed() {
+		if (controllerType == "TalonSRX" && talons != null && talons[0] != null)
+			return talons[0].get();
+		else if(controllerType == "SparkMAX" && sparks != null && sparks[0] != null)
+			return sparks[0].get();
 		return 0;
 	}
-	
-	public static void SetFullCAN(WPI_TalonSRX[] CAN)
+
+	public static void SetFullCAN(final WPI_TalonSRX[] CAN)
 	{
-		FullCAN = CAN;
+		CANTalons = CAN;
+	}
+
+	public static void SetFullSparks(final CANSparkMax[] sparks)
+	{
+		CANSparks = sparks;
 	}
 	
-	public ArrayList<WPI_TalonSRX> GetTalons()
+	public WPI_TalonSRX[] GetTalons()
 	{
-		return CAN;
+		return talons;
+	}
+	public CANSparkMax[] GetSparks()
+	{
+		return sparks;
 	}
 }
